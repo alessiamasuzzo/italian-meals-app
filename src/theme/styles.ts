@@ -122,5 +122,61 @@ export const styles = StyleSheet.create({
         marginLeft: spacing.sm,
     },
 
+    // --- dettaglio piatto ---
+    dettaglioContainer: {
+        flex: 1,
+        backgroundColor: colors.background,
+    },
+
+    dettaglioContent: {
+        padding: spacing.lg,
+    },
+
+    dettaglioImmagine: {
+        width: "100%",
+        height: 220,
+        borderRadius: borderRadius.md,
+        marginBottom: spacing.md,
+    },
+
+    dettaglioTitoloRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: spacing.sm,
+    },
+
+    dettaglioTitolo: {
+        fontSize: 22,
+        fontWeight: "700",
+        flexShrink: 1,
+    },
+
+    dettaglioCategoria: {
+        color: colors.textMuted,
+        fontSize: 14,
+        marginBottom: spacing.md,
+    },
+
+    sezioneTitolo: {
+        fontSize: 18,
+        fontWeight: "600",
+        marginTop: spacing.md,
+        marginBottom: spacing.sm,
+    },
+
+    ingredienteRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingVertical: spacing.xs,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.background,
+    },
+
+    istruzioniTesto: {
+        fontSize: 15,
+        lineHeight: 22,
+    },
+
 })
 
