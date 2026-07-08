@@ -21,3 +21,22 @@ export async function saveFavoriteIds(ids: string[]): Promise<void> {
     // ignora errori di storage
   }
 }
+
+export const THEME_KEY = "app:v1:theme";
+
+export async function loadThemeMode(): Promise<"light" | "dark"> {
+  try {
+    const raw = await AsyncStorage.getItem(THEME_KEY);
+    return raw === "dark" ? "dark" : "light";
+  } catch {
+    return "light";
+  }
+}
+
+export async function saveThemeMode(mode: "light" | "dark"): Promise<void> {
+  try {
+    await AsyncStorage.setItem(THEME_KEY, mode);
+  } catch {
+    // ignora errori di storage
+  }
+}

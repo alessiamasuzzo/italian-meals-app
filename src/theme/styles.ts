@@ -216,6 +216,7 @@ return StyleSheet.create({
             color: colors.text,
         },
 
+
         // --- accessibilità / feedback ---
         pressedFeedback: {
             opacity: 0.7,

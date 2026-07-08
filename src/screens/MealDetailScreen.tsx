@@ -1,15 +1,18 @@
 // screens/MealDetailScreen.tsx
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from "react-native";
-import { styles } from "../theme/styles";
+import { createStyles } from "../theme/styles";
 import { colors } from "../theme/tokens";
 import { fetchMealById, extractIngredients } from "../services/mealApi";
 import { useFavorites } from "../contex/FavoritesContex";
 import type { MealDetailState } from "../types/meal";
+import { useTheme } from "../contex/ThemeContex";
 
 export function MealDetailScreen({ route }: any) {
   const { idMeal } = route.params;
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const [state, setState] = useState<MealDetailState>({
     status: "idle",
@@ -46,8 +49,8 @@ export function MealDetailScreen({ route }: any) {
   if (state.status === "loading" || state.status === "idle") {
     return (
       <View style={styles.centerBox}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text>Caricamento dettaglio...</Text>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ color: theme.colors.text }}>Caricamento dettaglio...</Text>
       </View>
     );
   }
@@ -56,7 +59,10 @@ export function MealDetailScreen({ route }: any) {
     return (
       <View style={styles.centerBox}>
         <Text style={styles.errorText}>{state.message}</Text>
-        <Pressable style={styles.button} onPress={loadDetail}>
+        <Pressable
+          style={({ pressed }) => [styles.button, pressed && styles.pressedFeedback]}
+          onPress={loadDetail}
+        >
           <Text style={styles.buttonLabel}>Retry</Text>
         </Pressable>
       </View>
@@ -72,8 +78,15 @@ export function MealDetailScreen({ route }: any) {
       <Image source={{ uri: meal.strMealThumb }} style={styles.dettaglioImmagine} />
 
       <View style={styles.dettaglioTitoloRow}>
-        <Text style={styles.dettaglioTitolo}>{meal.strMeal}</Text>
-        <Pressable style={styles.favButton} onPress={() => toggleFavorite(meal.idMeal)}>
+        <Text accessibilityRole="header" style={styles.dettaglioTitolo} maxFontSizeMultiplier={1.4}>
+          {meal.strMeal}
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={active ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+          style={({ pressed }) => [styles.favButton, pressed && styles.pressedFeedback]}
+          onPress={() => toggleFavorite(meal.idMeal)}
+        >
           <Text style={styles.favText}>{active ? "♥" : "♡"}</Text>
         </Pressable>
       </View>
@@ -85,8 +98,8 @@ export function MealDetailScreen({ route }: any) {
       <Text style={styles.sezioneTitolo}>Ingredienti</Text>
       {ingredienti.map((ing, index) => (
         <View key={index} style={styles.ingredienteRow}>
-          <Text>{ing.name}</Text>
-          <Text>{ing.measure}</Text>
+          <Text style={{ color: theme.colors.text }}>{ing.name}</Text>
+          <Text style={{ color: theme.colors.text }}>{ing.measure}</Text>
         </View>
       ))}
 

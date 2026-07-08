@@ -1,15 +1,18 @@
 // screens/MealsListScreen.tsx
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, useWindowDimensions, View } from "react-native";
-import { styles } from "../theme/styles";
-import { colors } from "../theme/tokens";
+import { createStyles } from "../theme/styles";
+import { colors, spacing } from "../theme/tokens";
 import { fetchItalianMeals } from "../services/mealApi";
 import { useFavorites } from "../contex/FavoritesContex";
 import { MealCard } from "../components/MealCard";
 import type { MealsListState } from "../types/meal";
+import { useTheme } from "../contex/ThemeContex";
 
 export function MealsListScreen({ navigation }: any) {
   const { favoriteIds, isLoading: favoritesLoading } = useFavorites();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const { width } = useWindowDimensions();
   const isWide = width >= 600;
 
@@ -40,8 +43,8 @@ export function MealsListScreen({ navigation }: any) {
   if (state.status === "loading" || state.status === "idle" || favoritesLoading) {
     return (
       <View style={styles.centerBox}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text>Caricamento piatti italiani...</Text>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ color: theme.colors.text }}>Caricamento piatti italiani...</Text>
       </View>
     );
   }
@@ -50,7 +53,10 @@ export function MealsListScreen({ navigation }: any) {
     return (
       <View style={styles.centerBox}>
         <Text style={styles.errorText}>{state.message}</Text>
-        <Pressable style={styles.button} onPress={loadMeals}>
+        <Pressable
+          style={({ pressed }) => [styles.button, pressed && styles.pressedFeedback]}
+          onPress={loadMeals}
+        >
           <Text style={styles.buttonLabel}>Retry</Text>
         </Pressable>
       </View>
@@ -59,15 +65,31 @@ export function MealsListScreen({ navigation }: any) {
 
   return (
     <View style={styles.listaContainer}>
-      <Text style={styles.subtitle}>
-        Preferiti salvati: {favoriteIds.length} · Colonne: {isWide ? 2 : 1}
-      </Text>
 
       <Pressable
-        style={[styles.button]}
+        style={({ pressed }) => [
+          styles.button,
+          { marginBottom: spacing.sm, marginLeft: spacing.sm },
+          pressed && styles.pressedFeedback,
+        ]}
         onPress={() => navigation.navigate("Favorites")}
+        accessibilityRole="button"
+        accessibilityLabel="Vai alla schermata preferiti"
       >
         <Text style={styles.buttonLabel}>Vai ai preferiti</Text>
+      </Pressable>
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          { marginBottom: spacing.sm, marginLeft: spacing.sm },
+          pressed && styles.pressedFeedback,
+        ]}
+        onPress={() => navigation.navigate("Settings")}
+        accessibilityRole="button"
+        accessibilityLabel="Vai alle impostazioni"
+      >
+        <Text style={styles.buttonLabel}>Impostazioni</Text>
       </Pressable>
 
       {state.items.length === 0 ? (
