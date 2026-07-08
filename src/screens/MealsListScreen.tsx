@@ -4,6 +4,7 @@ import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native
 import { styles } from "../theme/styles";
 import { colors } from "../theme/tokens";
 import { fetchItalianMeals } from "../services/mealApi";
+import { loadFavoriteIds, saveFavoriteIds } from "../services/storage";
 import { MealCard } from "../components/MealCard";
 import type { MealsListState } from "../types/meal";
 
@@ -13,6 +14,9 @@ export function MealsListScreen({ navigation }: any) {
     items: [],
     message: "",
   });
+
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false);
 
   async function loadMeals() {
     setState({ status: "loading", items: [], message: "" });
@@ -32,7 +36,23 @@ export function MealsListScreen({ navigation }: any) {
     loadMeals();
   }, []);
 
-  if (state.status === "loading" || state.status === "idle") {
+  useEffect(() => {
+    loadFavoriteIds()
+      .then(setFavoriteIds)
+      .finally(() => setFavoritesLoaded(true));
+  }, []);
+
+  function toggleFavorite(idMeal: string) {
+    setFavoriteIds((current) => {
+      const next = current.includes(idMeal)
+        ? current.filter((id) => id !== idMeal)
+        : [...current, idMeal];
+      saveFavoriteIds(next);
+      return next;
+    });
+  }
+
+  if (state.status === "loading" || state.status === "idle" || !favoritesLoaded) {
     return (
       <View style={styles.centerBox}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -54,6 +74,10 @@ export function MealsListScreen({ navigation }: any) {
 
   return (
     <View style={styles.listaContainer}>
+      <Text style={styles.subtitle}>
+        Preferiti salvati: {favoriteIds.length} (chiave app:v1:favs)
+      </Text>
+
       {state.items.length === 0 ? (
         <Text style={styles.emptyText}>Nessun piatto italiano disponibile.</Text>
       ) : (
@@ -64,7 +88,9 @@ export function MealsListScreen({ navigation }: any) {
           renderItem={({ item }) => (
             <MealCard
               meal={item}
+              isFavorite={favoriteIds.includes(item.idMeal)}
               onPress={(idMeal) => navigation.navigate("MealDetail", { idMeal })}
+              onToggleFavorite={toggleFavorite}
             />
           )}
         />

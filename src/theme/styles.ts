@@ -103,5 +103,24 @@ export const styles = StyleSheet.create({
         textAlign: "center",
     },
 
+    // --- preferiti ---
+    favButton: {
+        padding: spacing.sm,
+        borderColor: colors.secondary,
+        borderWidth: 1,
+        borderRadius: borderRadius.sm,
+        marginLeft: spacing.sm,
+    },
+
+    favText: {
+        fontSize: 18,
+    },
+
+    subtitle: {
+        color: colors.textMuted,
+        marginBottom: spacing.sm,
+        marginLeft: spacing.sm,
+    },
+
 })
 
