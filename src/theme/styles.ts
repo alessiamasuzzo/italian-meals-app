@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: borderRadius.md,
         borderColor: colors.secondary,
-        borderWidth: 1,
+        borderWidth: 3,
         backgroundColor: "white",
         padding: spacing.sm,
         marginBottom: spacing.sm,
@@ -108,9 +108,10 @@ export const styles = StyleSheet.create({
     favButton: {
         padding: spacing.sm,
         borderColor: colors.secondary,
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: borderRadius.sm,
         marginLeft: spacing.sm,
+        backgroundColor: colors.secondary,
     },
 
     favText: {
@@ -169,19 +170,29 @@ export const styles = StyleSheet.create({
     ingredienteRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingVertical: spacing.xs,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.background,
+        paddingVertical: spacing.md,
+        margin: 2,
+                backgroundColor: "pink",
+        borderRadius: borderRadius.md,
+        borderColor: colors.secondary,
+        padding: spacing.md,
+        borderWidth: 3,
+        
     },
 
     istruzioniTesto: {
+        backgroundColor: "pink",
+        borderRadius: borderRadius.md,
+        borderColor: colors.secondary,
+        padding: spacing.md,
+        borderWidth: 3,
         fontSize: 15,
         lineHeight: 22,
     },
 
         // --- layout responsive ---
     wideRow: {
-        gap: spacing.sm,
+        gap: spacing.lg,
     },
 
     mealCardWide: {
