@@ -1,9 +1,13 @@
-//pagina degli stili (come se fosse css)
+//pagina degli stili (come se fosse css) 
+//dipende dal tema che viene impostato: Dark o Light
 
 import { StyleSheet } from "react-native";
-import { borderRadius, colors, spacing } from "./tokens";
+import { borderRadius, colors, spacing, AppTheme } from "./tokens";
 
-export const styles = StyleSheet.create({
+export function createStyles(theme: AppTheme) {
+    const { colors } = theme;
+
+return StyleSheet.create({
     container: {
         flex: 1,
     },
@@ -199,5 +203,24 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
 
+    // --- impostazioni / tema ---
+        switchRow: {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginVertical: spacing.md,
+        },
+
+        switchLabel: {
+            fontSize: 16,
+            color: colors.text,
+        },
+
+        // --- accessibilità / feedback ---
+        pressedFeedback: {
+            opacity: 0.7,
+        },
+
 })
 
+}
