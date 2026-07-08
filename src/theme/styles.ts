@@ -179,5 +179,14 @@ export const styles = StyleSheet.create({
         lineHeight: 22,
     },
 
+        // --- layout responsive ---
+    wideRow: {
+        gap: spacing.sm,
+    },
+
+    mealCardWide: {
+        flex: 1,
+    },
+
 })
 
