@@ -1,5 +1,5 @@
 // components/MealCard.tsx
-import { View, Text, Image, Pressable } from "react-native";
+import { View, Text, Image, Pressable, StyleProp, ViewStyle } from "react-native";
 import { styles } from "../theme/styles";
 import { useFavorites } from "../contex/FavoritesContex";
 import type { MealSummary } from "../types/meal";
@@ -7,14 +7,15 @@ import type { MealSummary } from "../types/meal";
 type Props = {
   meal: MealSummary;
   onPress: (idMeal: string) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-export function MealCard({ meal, onPress }: Props) {
+export function MealCard({ meal, onPress, style }: Props) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const active = isFavorite(meal.idMeal);
 
   return (
-    <View style={styles.mealCard}>
+    <View style={[styles.mealCard, style]}>
       <Pressable
         style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
         onPress={() => onPress(meal.idMeal)}
