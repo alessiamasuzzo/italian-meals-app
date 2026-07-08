@@ -1,16 +1,18 @@
 // components/MealCard.tsx
 import { View, Text, Image, Pressable } from "react-native";
 import { styles } from "../theme/styles";
+import { useFavorites } from "../contex/FavoritesContex";
 import type { MealSummary } from "../types/meal";
 
 type Props = {
   meal: MealSummary;
-  isFavorite: boolean;
   onPress: (idMeal: string) => void;
-  onToggleFavorite: (idMeal: string) => void;
 };
 
-export function MealCard({ meal, isFavorite, onPress, onToggleFavorite }: Props) {
+export function MealCard({ meal, onPress }: Props) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const active = isFavorite(meal.idMeal);
+
   return (
     <View style={styles.mealCard}>
       <Pressable
@@ -23,8 +25,8 @@ export function MealCard({ meal, isFavorite, onPress, onToggleFavorite }: Props)
         </Text>
       </Pressable>
 
-      <Pressable style={styles.favButton} onPress={() => onToggleFavorite(meal.idMeal)}>
-        <Text style={styles.favText}>{isFavorite ? "♥" : "♡"}</Text>
+      <Pressable style={styles.favButton} onPress={() => toggleFavorite(meal.idMeal)}>
+        <Text style={styles.favText}>{active ? "♥" : "♡"}</Text>
       </Pressable>
     </View>
   );

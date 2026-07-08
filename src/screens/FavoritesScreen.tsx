@@ -1,4 +1,4 @@
-// screens/MealsListScreen.tsx
+// screens/FavoritesScreen.tsx
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 import { styles } from "../theme/styles";
@@ -8,7 +8,7 @@ import { useFavorites } from "../contex/FavoritesContex";
 import { MealCard } from "../components/MealCard";
 import type { MealsListState } from "../types/meal";
 
-export function MealsListScreen({ navigation }: any) {
+export function FavoritesScreen({ navigation }: any) {
   const { favoriteIds, isLoading: favoritesLoading } = useFavorites();
 
   const [state, setState] = useState<MealsListState>({
@@ -39,7 +39,7 @@ export function MealsListScreen({ navigation }: any) {
     return (
       <View style={styles.centerBox}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text>Caricamento piatti italiani...</Text>
+        <Text>Caricamento...</Text>
       </View>
     );
   }
@@ -55,22 +55,19 @@ export function MealsListScreen({ navigation }: any) {
     );
   }
 
+  const visibleMeals = state.items.filter((meal) => favoriteIds.includes(meal.idMeal));
+
   return (
     <View style={styles.listaContainer}>
-        <Pressable
-  onPress={() => navigation.navigate("Favorites")}
->
-  <Text style={styles.button}>Vai ai preferiti</Text>
-</Pressable>
-      <Text style={styles.subtitle}>
-        Preferiti salvati: {favoriteIds.length} (chiave app:v1:favs)
-      </Text>
-
-      {state.items.length === 0 ? (
-        <Text style={styles.emptyText}>Nessun piatto italiano disponibile.</Text>
+      {visibleMeals.length === 0 ? (
+        <View style={styles.centerBox}>
+          <Text style={styles.emptyText}>
+            Nessun preferito ancora. Tocca ♡ su un piatto dalla lista.
+          </Text>
+        </View>
       ) : (
         <FlatList
-          data={state.items}
+          data={visibleMeals}
           keyExtractor={(item) => item.idMeal}
           contentContainerStyle={styles.listaContent}
           renderItem={({ item }) => (

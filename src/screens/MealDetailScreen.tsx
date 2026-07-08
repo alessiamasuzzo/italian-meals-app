@@ -4,20 +4,18 @@ import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from "rea
 import { styles } from "../theme/styles";
 import { colors } from "../theme/tokens";
 import { fetchMealById, extractIngredients } from "../services/mealApi";
-import { loadFavoriteIds, saveFavoriteIds } from "../services/storage";
+import { useFavorites } from "../contex/FavoritesContex";
 import type { MealDetailState } from "../types/meal";
 
 export function MealDetailScreen({ route }: any) {
   const { idMeal } = route.params;
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const [state, setState] = useState<MealDetailState>({
     status: "idle",
     meal: null,
     message: "",
   });
-
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
-  const [favoritesLoaded, setFavoritesLoaded] = useState(false);
 
   async function loadDetail() {
     if (!idMeal) {
@@ -45,23 +43,7 @@ export function MealDetailScreen({ route }: any) {
     loadDetail();
   }, [idMeal]);
 
-  useEffect(() => {
-    loadFavoriteIds()
-      .then(setFavoriteIds)
-      .finally(() => setFavoritesLoaded(true));
-  }, []);
-
-  function toggleFavorite() {
-    setFavoriteIds((current) => {
-      const next = current.includes(idMeal)
-        ? current.filter((id) => id !== idMeal)
-        : [...current, idMeal];
-      saveFavoriteIds(next);
-      return next;
-    });
-  }
-
-  if (state.status === "loading" || state.status === "idle" || !favoritesLoaded) {
+  if (state.status === "loading" || state.status === "idle") {
     return (
       <View style={styles.centerBox}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -83,7 +65,7 @@ export function MealDetailScreen({ route }: any) {
 
   const meal = state.meal;
   const ingredienti = extractIngredients(meal);
-  const isFavorite = favoriteIds.includes(meal.idMeal);
+  const active = isFavorite(meal.idMeal);
 
   return (
     <ScrollView style={styles.dettaglioContainer} contentContainerStyle={styles.dettaglioContent}>
@@ -91,8 +73,8 @@ export function MealDetailScreen({ route }: any) {
 
       <View style={styles.dettaglioTitoloRow}>
         <Text style={styles.dettaglioTitolo}>{meal.strMeal}</Text>
-        <Pressable style={styles.favButton} onPress={toggleFavorite}>
-          <Text style={styles.favText}>{isFavorite ? "♥" : "♡"}</Text>
+        <Pressable style={styles.favButton} onPress={() => toggleFavorite(meal.idMeal)}>
+          <Text style={styles.favText}>{active ? "♥" : "♡"}</Text>
         </Pressable>
       </View>
 

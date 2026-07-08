@@ -13,10 +13,11 @@ export const styles = StyleSheet.create({
         paddingHorizontal: spacing.lg,
         paddingVertical: spacing.sm,
         borderRadius: borderRadius.round,
-        width: 100,
-        alignItems: "center",
-        marginLeft: 10,
-        marginTop: 7,
+        width: 140,
+        margin: 7,
+        color: "white",
+        fontSize: 16,
+        fontWeight: "600",
     },
 
     buttonDisabled: {
