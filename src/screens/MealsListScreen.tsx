@@ -1,6 +1,6 @@
 // screens/MealsListScreen.tsx
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, Text, useWindowDimensions, View } from "react-native";
 import { styles } from "../theme/styles";
 import { colors } from "../theme/tokens";
 import { fetchItalianMeals } from "../services/mealApi";
@@ -10,6 +10,8 @@ import type { MealsListState } from "../types/meal";
 
 export function MealsListScreen({ navigation }: any) {
   const { favoriteIds, isLoading: favoritesLoading } = useFavorites();
+  const { width } = useWindowDimensions();
+  const isWide = width >= 600;
 
   const [state, setState] = useState<MealsListState>({
     status: "idle",
@@ -57,25 +59,31 @@ export function MealsListScreen({ navigation }: any) {
 
   return (
     <View style={styles.listaContainer}>
-        <Pressable
-  onPress={() => navigation.navigate("Favorites")}
->
-  <Text style={styles.button}>Vai ai preferiti</Text>
-</Pressable>
       <Text style={styles.subtitle}>
-        Preferiti salvati: {favoriteIds.length} (chiave app:v1:favs)
+        Preferiti salvati: {favoriteIds.length} · Colonne: {isWide ? 2 : 1}
       </Text>
+
+      <Pressable
+        style={[styles.button]}
+        onPress={() => navigation.navigate("Favorites")}
+      >
+        <Text style={styles.buttonLabel}>Vai ai preferiti</Text>
+      </Pressable>
 
       {state.items.length === 0 ? (
         <Text style={styles.emptyText}>Nessun piatto italiano disponibile.</Text>
       ) : (
         <FlatList
+          key={isWide ? "wide" : "narrow"}
           data={state.items}
+          numColumns={isWide ? 2 : 1}
+          columnWrapperStyle={isWide ? styles.wideRow : undefined}
           keyExtractor={(item) => item.idMeal}
           contentContainerStyle={styles.listaContent}
           renderItem={({ item }) => (
             <MealCard
               meal={item}
+              style={isWide ? styles.mealCardWide : undefined}
               onPress={(idMeal) => navigation.navigate("MealDetail", { idMeal })}
             />
           )}

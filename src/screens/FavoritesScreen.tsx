@@ -1,6 +1,6 @@
 // screens/FavoritesScreen.tsx
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, Text, useWindowDimensions, View } from "react-native";
 import { styles } from "../theme/styles";
 import { colors } from "../theme/tokens";
 import { fetchItalianMeals } from "../services/mealApi";
@@ -10,6 +10,8 @@ import type { MealsListState } from "../types/meal";
 
 export function FavoritesScreen({ navigation }: any) {
   const { favoriteIds, isLoading: favoritesLoading } = useFavorites();
+  const { width } = useWindowDimensions();
+  const isWide = width >= 600;
 
   const [state, setState] = useState<MealsListState>({
     status: "idle",
@@ -67,12 +69,16 @@ export function FavoritesScreen({ navigation }: any) {
         </View>
       ) : (
         <FlatList
+          key={isWide ? "wide" : "narrow"}
           data={visibleMeals}
+          numColumns={isWide ? 2 : 1}
+          columnWrapperStyle={isWide ? styles.wideRow : undefined}
           keyExtractor={(item) => item.idMeal}
           contentContainerStyle={styles.listaContent}
           renderItem={({ item }) => (
             <MealCard
               meal={item}
+              style={isWide ? styles.mealCardWide : undefined}
               onPress={(idMeal) => navigation.navigate("MealDetail", { idMeal })}
             />
           )}
