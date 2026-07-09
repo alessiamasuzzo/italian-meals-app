@@ -16,7 +16,7 @@ function RootNavigator() {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
-    return null; // oppure uno spinner, se preferisci
+    return null; 
   }
 
   return (
