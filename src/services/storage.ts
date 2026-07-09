@@ -40,3 +40,27 @@ export async function saveThemeMode(mode: "light" | "dark"): Promise<void> {
     // ignora errori di storage
   }
 }
+
+export const SESSION_KEY = "app:v1:session";
+
+export async function loadSession(): Promise<{ email: string; name: string; avatarUri: string } | null> {
+  try {
+    const raw = await AsyncStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export async function saveSession(user: { email: string; name: string; avatarUri: string } | null): Promise<void> {
+  try {
+    if (user === null) {
+      await AsyncStorage.removeItem(SESSION_KEY);
+    } else {
+      await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    }
+  } catch {
+    // ignora errori di storage
+  }
+}

@@ -8,10 +8,13 @@ import { useFavorites } from "../contex/FavoritesContex";
 import { MealCard } from "../components/MealCard";
 import type { MealsListState } from "../types/meal";
 import { useTheme } from "../contex/ThemeContex";
+import { useAuth } from "../contex/AuthContext";
+import { Avatar } from "../components/Avatar";
 
 export function MealsListScreen({ navigation }: any) {
   const { favoriteIds, isLoading: favoritesLoading } = useFavorites();
   const { theme } = useTheme();
+  const { user } = useAuth();
   const styles = createStyles(theme);
   const { width } = useWindowDimensions();
   const isWide = width >= 600;
@@ -65,6 +68,13 @@ export function MealsListScreen({ navigation }: any) {
 
   return (
     <View style={styles.listaContainer}>
+
+      {user && (
+        <View style={styles.headerProfilo}>
+          <Avatar uri={user.avatarUri} size={40} />
+          <Text style={styles.headerNome}>{user.name}</Text>
+        </View>
+      )}
 
       <Pressable
         style={({ pressed }) => [

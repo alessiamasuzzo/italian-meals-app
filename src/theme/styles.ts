@@ -222,6 +222,62 @@ return StyleSheet.create({
             opacity: 0.7,
         },
 
+        // --- login ---
+        loginContainer: {
+            flex: 1,
+            justifyContent: "center",
+            padding: spacing.xl,
+            backgroundColor: colors.background,
+        },
+
+        loginTitolo: {
+            fontSize: 24,
+            fontWeight: "700",
+            marginBottom: spacing.lg,
+            color: colors.text,
+            textAlign: "center",
+        },
+
+        input: {
+            borderWidth: 1,
+            borderColor: colors.secondary,
+            borderRadius: borderRadius.sm,
+            padding: spacing.md,
+            marginBottom: spacing.md,
+            backgroundColor: colors.card,
+            color: colors.text,
+        },
+
+        loginButton: {
+            backgroundColor: colors.primary,
+            paddingVertical: spacing.md,
+            borderRadius: borderRadius.round,
+            alignItems: "center",
+            marginTop: spacing.sm,
+        },
+
+        // --- avatar ---
+        avatarContainer: {
+            borderRadius: 999,
+            overflow: "hidden",
+            borderWidth: 1,
+            borderColor: colors.secondary,
+        },
+
+        headerProfilo: {
+            flexDirection: "row",
+            alignItems: "center",
+            gap: spacing.md,
+            padding: spacing.sm,
+            marginBottom: spacing.sm,
+        },
+
+        headerNome: {
+            fontSize: 16,
+            fontWeight: "600",
+            color: colors.text,
+        },
+
 })
 
 }

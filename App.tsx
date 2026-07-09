@@ -6,40 +6,65 @@ import { MealsListScreen } from "./src/screens/MealsListScreen";
 import { MealDetailScreen } from "./src/screens/MealDetailScreen";
 import { FavoritesScreen } from "./src/screens/FavoritesScreen";
 import { ThemeProvider } from "./src/contex/ThemeContex";
-
 import { SettingsScreen } from "./src/screens/SettingScreen";
+import { AuthProvider, useAuth } from "./src/contex/AuthContext";
+import { LoginScreen } from "./src/screens/LoginScreen";
 
 const Stack = createNativeStackNavigator();
+
+function RootNavigator() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null; // oppure uno spinner, se preferisci
+  }
+
+  return (
+    <Stack.Navigator>
+      {!user ? (
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+      ) : (
+        <>
+          <Stack.Screen
+            name="MealsList"
+            component={MealsListScreen}
+            options={{ title: "Piatti italiani" }}
+          />
+          <Stack.Screen
+            name="MealDetail"
+            component={MealDetailScreen}
+            options={{ title: "Dettaglio" }}
+          />
+          <Stack.Screen
+            name="Favorites"
+            component={FavoritesScreen}
+            options={{ title: "I tuoi preferiti" }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{ title: "Impostazioni" }}
+          />
+        </>
+      )}
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <ThemeProvider>
-      <FavoritesProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="MealsList">
-            <Stack.Screen
-              name="MealsList"
-              component={MealsListScreen}
-              options={{ title: "Piatti italiani" }}
-            />
-            <Stack.Screen
-              name="MealDetail"
-              component={MealDetailScreen}
-              options={{ title: "Dettaglio" }}
-            />
-            <Stack.Screen
-              name="Favorites"
-              component={FavoritesScreen}
-              options={{ title: "I tuoi preferiti" }}
-            />
-            <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{ title: "Impostazioni" }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </FavoritesProvider>
+      <AuthProvider>
+        <FavoritesProvider>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </FavoritesProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
