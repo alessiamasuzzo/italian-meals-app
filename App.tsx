@@ -9,6 +9,7 @@ import { ThemeProvider } from "./src/contex/ThemeContex";
 import { SettingsScreen } from "./src/screens/SettingScreen";
 import { AuthProvider, useAuth } from "./src/contex/AuthContext";
 import { LoginScreen } from "./src/screens/LoginScreen";
+import * as Linking from "expo-linking";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +20,18 @@ function RootNavigator() {
     return null; 
   }
 
+  const linking = {
+  prefixes: [Linking.createURL("/"), "italian-meals-app://"],
+  config: {
+    screens: {
+      Home: "home",
+      Details: "details/:id",
+    },
+  },
+};
+
   return (
+    <NavigationContainer linking={linking}>
     <Stack.Navigator>
       {!user ? (
         <Stack.Screen
@@ -52,6 +64,7 @@ function RootNavigator() {
         </>
       )}
     </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
