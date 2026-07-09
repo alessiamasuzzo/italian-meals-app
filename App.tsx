@@ -13,25 +13,27 @@ import * as Linking from "expo-linking";
 
 const Stack = createNativeStackNavigator();
 
-function RootNavigator() {
-  const { user, isLoading } = useAuth();
-
-  if (isLoading) {
-    return null; 
-  }
-
-  const linking = {
+const linking = {
   prefixes: [Linking.createURL("/"), "italian-meals-app://"],
   config: {
     screens: {
-      Home: "home",
-      Details: "details/:id",
+      MealsList: "meals",
+      MealDetail: "meal/:idMeal",
+      Favorites: "favorites",
+      Settings: "settings",
+      Login: "login",
     },
   },
 };
 
+function RootNavigator() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
+
   return (
-    <NavigationContainer linking={linking}>
     <Stack.Navigator>
       {!user ? (
         <Stack.Screen
@@ -64,7 +66,6 @@ function RootNavigator() {
         </>
       )}
     </Stack.Navigator>
-    </NavigationContainer>
   );
 }
 
@@ -73,7 +74,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <FavoritesProvider>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <RootNavigator />
           </NavigationContainer>
         </FavoritesProvider>
